@@ -1,0 +1,29 @@
+[package]
+
+name = "shader-lab-rs"
+version = "0.0.1"
+authors = [
+    "Danny Angelo Carminati Grein <fungos@gmail.com>"
+]
+
+[dependencies.event_loop]
+git = "https://github.com/fungos/event_loop"
+
+[dependencies.image]
+git = "https://github.com/pistondevelopers/image"
+
+[dependencies.cgmath]
+git = "http://github.com/bjz/cgmath-rs"
+
+[dependencies.glutin]
+git = "http://github.com/tomaka/glutin"
+features = ["window"]
+
+[dependencies.glium]
+git = "http://github.com/tomaka/glium"
+
+[dependencies.glium_macros]
+git = "http://github.com/tomaka/glium"
+
+[dependencies]
+clock_ticks = "*"

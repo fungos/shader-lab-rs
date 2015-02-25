@@ -1,0 +1,8 @@
+*.lock
+*~
+.*~
+target/
+*.config
+*.creator*
+*.files
+*.includes
