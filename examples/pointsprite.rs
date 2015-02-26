@@ -174,6 +174,10 @@ impl<'a> Stage<VertexData, Uniforms<'a>> for Scene<'a> {
     fn update(&mut self, dt: f32) {
     }
 
+    #[allow(unused_variables)]
+    fn render(&mut self, dt: f32) {
+    }
+
     fn get_vertex_buffer(&self) -> VertexBuffer<VertexData> {
         VertexBuffer::new(&self.render.context, vec![
             VertexData { pos: [0.0, 0.0], uv: [0.5, 0.5], color: [1.0, 1.0, 1.0, 1.0] },

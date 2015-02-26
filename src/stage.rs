@@ -3,6 +3,7 @@ use render::Draw;
 
 pub trait Stage<T, U> {
     fn update(&mut self, dt: f32);
+    fn render(&mut self, dt: f32);
     fn get_vertex_buffer(&self) -> VertexBuffer<T>;
     fn get_index_buffer(&self) -> IndexBuffer;
     fn get_program(&self) -> Program;
@@ -32,7 +33,8 @@ impl <'a, V: vertex::Vertex, U: uniforms::Uniforms + Copy, T: Stage<V, U>> Draw 
     #[inline]
     #[allow(unused_variables)]
     fn draw(&self, frame: &mut Frame, dt: f32) {
-        let obj = &self.obj;
+        let mut obj = &self.obj;
+        obj.render(dt);
         frame.draw(
             &obj.get_vertex_buffer(),
             &obj.get_index_buffer(),
