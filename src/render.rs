@@ -6,7 +6,7 @@ pub struct Render {
 }
 
 pub trait Draw {
-    fn draw(&self, frame: &mut Frame, dt: f32);
+    fn draw(&mut self, frame: &mut Frame, dt: f32);
 }
 
 impl Render {
@@ -17,7 +17,7 @@ impl Render {
     }
 
     #[inline]
-    pub fn draw<T: Draw>(&self, frame: &mut Frame, obj: &T, dt: f32) {
+    pub fn draw<T: Draw>(&mut self, frame: &mut Frame, obj: &T, dt: f32) {
         obj.draw(frame, dt);
     }
 
