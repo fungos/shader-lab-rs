@@ -1,12 +1,10 @@
-A simple lib to mess with shaders in Rust.
-
+A simple lib to experiment with shaders in Rust.
+[![Build Status](https://travis-ci.org/fungos/shader-lab-rs.svg?branch=master)](https://travis-ci.org/fungos/shader-lab-rs)
 
 $ cargo build
 
 $ cargo test
 
+To run examples:
 
-
-ISSUES:
-
-* Need figure out changes to make the Stage mutable so StageContainer can do update on it.
+$ cargo run --example <example_name>

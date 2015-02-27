@@ -5,10 +5,6 @@ pub struct Render {
     pub context: Display,
 }
 
-pub trait Draw {
-    fn draw(&mut self, frame: &mut Frame, dt: f32);
-}
-
 impl Render {
     pub fn new(context: Display) -> Render {
         Render {
@@ -17,13 +13,8 @@ impl Render {
     }
 
     #[inline]
-    pub fn draw<T: Draw>(&mut self, frame: &mut Frame, obj: &T, dt: f32) {
-        obj.draw(frame, dt);
-    }
-
-    #[inline]
-    pub fn load_texture(render: &Render, path: &Path) -> Texture2d {
-        Texture2d::new(&render.context, image::open(path).unwrap())
+    pub fn load_texture(&self, path: &Path) -> Texture2d {
+        Texture2d::new(&self.context, image::open(path).unwrap())
     }
 
     #[inline]

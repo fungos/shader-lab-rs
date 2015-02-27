@@ -1,31 +1,27 @@
 use event_loop::{LoopState, HasEventLoop};
-use render::Render;
 use stage::{StageContainer, Stage};
 use glutin::Event;
 use glium::*;
 
-pub struct Lab <'a, V, U, T: Stage<V, U>> {
-    pub render: &'a Render,
-    pub stage: StageContainer<'a, V, U, T>,
+pub struct Lab <V, U, T: Stage<V, U>> {
+    pub stage: StageContainer<V, U, T>,
     pub timestamp: f64,
 }
 
-impl <'a, V, U, T: Stage<V, U>> Lab <'a, V, U, T> {
-    pub fn new(render: &'a Render, obj: T) -> Self {
+impl <V: vertex::Vertex, U: uniforms::Uniforms + Copy, T: Stage<V, U>> Lab <V, U, T> {
+    pub fn new(obj: T) -> Self {
         let stage = StageContainer::new(obj);
         Lab {
-            render: &render,
             stage: stage,
             timestamp: 0 as f64,
         }
     }
 }
 
-impl <'a, V: vertex::Vertex, U: uniforms::Uniforms + Copy, T: Stage<V, U>> HasEventLoop for Lab<'a, V, U, T> {
+impl <V: vertex::Vertex, U: uniforms::Uniforms + Copy, T: Stage<V, U>> HasEventLoop for Lab<V, U, T> {
     fn render(&mut self, dt: f32) {
-        let mut frame = self.render.begin();
-        self.render.draw(&mut frame, &self.stage, dt);
-        frame.finish();
+        self.stage.draw(dt);
+        self.timestamp += dt as f64;
     }
 
     #[allow(unused_variables)]
@@ -34,9 +30,14 @@ impl <'a, V: vertex::Vertex, U: uniforms::Uniforms + Copy, T: Stage<V, U>> HasEv
     }
 
     fn poll(&mut self) -> Option<LoopState> {
-        for event in self.render.poll_events() {
+        for event in self.stage.poll_events() {
+            println!("{:?}", event);
             match event {
                 Event::Closed => return Some(LoopState::Break),
+                Event::MouseMoved((x, y)) => {
+                    //println!("Mouse moved {},{}!", x, y);
+                    return Some(LoopState::Continue)
+                },
                 _ => return Some(LoopState::Continue),
             }
         }

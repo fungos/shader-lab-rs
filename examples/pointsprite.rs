@@ -1,5 +1,5 @@
 #![feature(plugin)]
-#![feature(path)]
+#![feature(old_path)]
 #![plugin(glium_macros)]
 
 extern crate cgmath;
@@ -136,6 +136,8 @@ pub struct Scene<'a> {
     proj_matrix: Matrix4<f32>,
     width_height_offset: Vector4<f32>,
     texture: &'a Texture2d,
+    frame_dt: f32,
+    update_dt: f32,
 }
 
 impl<'a> Scene<'a> {
@@ -165,35 +167,43 @@ impl<'a> Scene<'a> {
             proj_matrix: mtx,
             width_height_offset: width_height_offset,
             texture: &tex,
+            frame_dt: 0.0,
+            update_dt: 0.0,
         }
     }
 }
 
 impl<'a> Stage<VertexData, Uniforms<'a>> for Scene<'a> {
-    #[allow(unused_variables)]
+    #[inline]
     fn update(&mut self, dt: f32) {
+        self.update_dt = dt;
     }
 
-    #[allow(unused_variables)]
+    #[inline]
     fn render(&mut self, dt: f32) {
+        self.frame_dt = dt;
     }
 
+    #[inline]
     fn get_vertex_buffer(&self) -> VertexBuffer<VertexData> {
         VertexBuffer::new(&self.render.context, vec![
             VertexData { pos: [0.0, 0.0], uv: [0.5, 0.5], color: [1.0, 1.0, 1.0, 1.0] },
         ])
     }
 
+    #[inline]
     fn get_index_buffer(&self) -> IndexBuffer {
         IndexBuffer::new(&self.render.context, index::PointsList(vec![1 as u16]))
     }
 
+    #[inline]
     fn get_program(&self) -> Program {
         Program::from_source(&self.render.context,
             VERTEX_SHADER, FRAGMENT_SHADER, Some(GEOMETRY_SHADER)
         ).unwrap()
     }
 
+    #[inline]
     fn get_uniforms(&self) -> Uniforms<'a> {
         Uniforms {
             model: *self.model_matrix.as_fixed(),
@@ -204,6 +214,7 @@ impl<'a> Stage<VertexData, Uniforms<'a>> for Scene<'a> {
         }
     }
 
+    #[inline]
     fn get_draw_params(&self) -> DrawParameters {
         DrawParameters {
             blending_function: Some(BlendingFunction::Addition {
@@ -213,11 +224,16 @@ impl<'a> Stage<VertexData, Uniforms<'a>> for Scene<'a> {
             .. std::default::Default::default()
         }
     }
+
+    #[inline]
+    fn get_render(&self) -> &Render {
+        self.render
+    }
 }
 
 fn main() {
     let render = shader::init(WIDTH, HEIGHT);
-    let tex = Render::load_texture(&render, &Path::new("./examples/data/image.png"));
+    let tex = render.load_texture(&Path::new("./examples/data/image.png"));
     let scene = Scene::new(&render, &tex);
-    shader::run::<VertexData, Uniforms, Scene>(scene, &render);
+    shader::run::<VertexData, Uniforms, Scene>(scene);
 }

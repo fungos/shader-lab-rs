@@ -1,7 +1,7 @@
 #![feature(plugin)]
 #![plugin(glium_macros)]
 #![cfg_attr(test, allow(warnings))]
-#![feature(path)]
+#![feature(old_path)]
 
 extern crate event_loop;
 extern crate image;
@@ -31,11 +31,11 @@ pub fn init(w: u32, h: u32) -> render::Render {
     Render::new(display)
 }
 
-pub fn run<V: glium::vertex::Vertex, U: glium::uniforms::Uniforms + Copy, T: Stage<V, U>>(obj: T, render: &Render) {
+pub fn run<V: glium::vertex::Vertex, U: glium::uniforms::Uniforms + Copy, T: Stage<V, U>>(obj: T) {
     use event_loop::EventLoop;
     use lab::Lab;
 
-    let mut lab: Lab<V, U, T> = Lab::new(render, obj);
+    let mut lab: Lab<V, U, T> = Lab::new(obj);
     let evt = EventLoop::new(120, 60);
     evt.run(&mut lab);
 }
