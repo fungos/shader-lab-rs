@@ -31,7 +31,7 @@ impl <V: vertex::Vertex, U: uniforms::Uniforms + Copy, T: Stage<V, U>> HasEventL
 
     fn poll(&mut self) -> Option<LoopState> {
         for event in self.stage.poll_events() {
-            println!("{:?}", event);
+            //println!("{:?}", event);
             match event {
                 Event::Closed => return Some(LoopState::Break),
                 Event::MouseMoved((x, y)) => {
